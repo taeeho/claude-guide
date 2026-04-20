@@ -152,7 +152,7 @@ export default function McpGrid() {
       desc="Google Drive의 파일을 Claude에게 바로 읽히거나, Notion 페이지를 요약·작성하거나, 캘린더 일정을 잡을 수 있어요. 아래 두 가지 방법 중 편한 쪽을 선택하세요."
     >
       {/* 앱 방식 - 비개발자용 (권장) */}
-      <div className="mb-10 p-5 sm:p-7 bg-teal-soft/50 border border-[#B7DDD5] rounded-r2">
+      <div className="mb-10 p-3 sm:p-7 bg-teal-soft/50 border border-[#B7DDD5] rounded-r2">
         <span className="inline-block text-[11px] font-bold uppercase tracking-[.08em] text-teal bg-paper px-2 py-0.5 rounded mb-3">권장 · 비개발자</span>
         <h3 className="m-0 text-[20px] sm:text-[22px] font-bold">방법 1 · Claude 앱에서 클릭으로 연결</h3>
         <p className="mt-2 mb-5 text-[14px] sm:text-[14.5px] text-inksoft max-w-[720px]">

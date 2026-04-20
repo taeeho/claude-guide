@@ -6,7 +6,7 @@ export function PageShell({ children, backTo = '/', backLabel = '홈으로' }) {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
   return (
-    <main className="max-w-[1100px] mx-auto px-5 sm:px-7 pt-6 sm:pt-10 pb-16 animate-fade">
+    <main className="max-w-[1100px] mx-auto px-3 sm:px-7 pt-6 sm:pt-10 pb-16 animate-fade">
       <Link to={backTo}
         className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-inksoft hover:text-accent mb-4 no-underline">
         <span aria-hidden>←</span>{backLabel}
@@ -24,14 +24,14 @@ export function Section({ id, tone = 'teal', eyebrow, title, desc, children }) {
       id={id}
       className="mt-14 bg-paper border border-line rounded-[18px] overflow-hidden"
     >
-      <div className="px-6 sm:px-9 pt-8 sm:pt-9 pb-6 bg-gradient-to-b from-bgsoft to-transparent border-b border-line">
+      <div className="px-4 sm:px-9 pt-7 sm:pt-9 pb-5 sm:pb-6 bg-gradient-to-b from-bgsoft to-transparent border-b border-line">
         <span className={`inline-flex items-center gap-2 text-[12px] font-bold tracking-[.06em] uppercase ${tagBg} px-2.5 py-1 rounded-md`}>
           {eyebrow}
         </span>
-        <h2 className="mt-3 mb-1 text-[26px] sm:text-[32px] font-bold tracking-[-0.02em] leading-tight">{title}</h2>
-        <p className="m-0 max-w-2xl text-[14.5px] sm:text-[15.5px] text-inksoft">{desc}</p>
+        <h2 className="mt-3 mb-1 text-[24px] sm:text-[32px] font-bold tracking-[-0.02em] leading-tight">{title}</h2>
+        <p className="m-0 max-w-2xl text-[14px] sm:text-[15.5px] text-inksoft">{desc}</p>
       </div>
-      <div className="px-5 sm:px-9 py-6 sm:py-8">{children}</div>
+      <div className="px-3 sm:px-9 py-5 sm:py-8">{children}</div>
     </section>
   )
 }
@@ -83,10 +83,10 @@ export function OsBanner({ children }) {
 /* ---------- Step card ---------- */
 export function Step({ n, title, children }) {
   return (
-    <div className="grid grid-cols-[36px_1fr] sm:grid-cols-[44px_1fr] gap-4 sm:gap-[18px] p-4 sm:p-5 border border-line rounded-r2 bg-paper hover:border-linestrong hover:shadow-sm2 transition">
-      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-[10px] bg-ink text-white grid place-items-center font-bold text-[14px] sm:text-[15px] shadow-sm2">{n}</div>
+    <div className="grid grid-cols-[28px_1fr] sm:grid-cols-[44px_1fr] gap-2.5 sm:gap-[18px] p-3 sm:p-5 border border-line rounded-r2 bg-paper hover:border-linestrong hover:shadow-sm2 transition">
+      <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-[8px] sm:rounded-[10px] bg-ink text-white grid place-items-center font-bold text-[13px] sm:text-[15px] shadow-sm2">{n}</div>
       <div className="min-w-0">
-        <h4 className="mt-0.5 mb-2 text-[16px] sm:text-[17px] font-bold tracking-[-0.01em]">{title}</h4>
+        <h4 className="mt-0.5 mb-2 text-[15px] sm:text-[17px] font-bold tracking-[-0.01em] leading-snug">{title}</h4>
         <div className="text-[14px] sm:text-[14.5px] text-inksoft space-y-1.5 leading-relaxed">{children}</div>
       </div>
     </div>
@@ -140,13 +140,68 @@ export function CodeLine({ prompt = '$', children }) {
   return <><span className="prompt">{prompt}</span>{children}<br /></>
 }
 
-/* ---------- Figure ---------- */
+/* ---------- Figure with click-to-zoom lightbox ---------- */
 export function Shot({ src, alt, caption }) {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
   return (
-    <figure className="my-3.5 border border-line rounded-r2 bg-[#0E0E0C] p-3.5 overflow-hidden">
-      <img src={src} alt={alt} className="block w-full h-auto rounded-lg shadow-md2" />
-      {caption && <figcaption className="mt-2.5 text-[12.5px] text-[#A8A39A] text-center tracking-[.02em]">{caption}</figcaption>}
-    </figure>
+    <>
+      <figure className="my-3 sm:my-3.5 border border-line rounded-r2 bg-[#0E0E0C] p-2 sm:p-3.5 overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="block w-full cursor-zoom-in group relative"
+          aria-label="이미지 크게 보기"
+        >
+          <img src={src} alt={alt} className="block w-full h-auto rounded-md sm:rounded-lg shadow-md2 transition group-hover:opacity-90" />
+          <span className="absolute bottom-1.5 right-1.5 bg-black/55 text-white text-[10.5px] font-semibold px-1.5 py-0.5 rounded sm:opacity-0 sm:group-hover:opacity-100 transition">
+            탭하여 크게 보기
+          </span>
+        </button>
+        {caption && <figcaption className="mt-2 sm:mt-2.5 text-[11.5px] sm:text-[12.5px] text-[#A8A39A] text-center tracking-[.02em] leading-relaxed">{caption}</figcaption>}
+      </figure>
+
+      {open && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 animate-fade cursor-zoom-out"
+        >
+          <button
+            type="button"
+            aria-label="닫기"
+            onClick={() => setOpen(false)}
+            className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 text-white grid place-items-center text-[22px] leading-none"
+          >
+            ×
+          </button>
+          <img
+            src={src}
+            alt={alt}
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-full max-h-[88vh] object-contain rounded-md shadow-2xl"
+          />
+          {caption && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[12px] text-white/75 px-4 text-center max-w-[90%] leading-relaxed pointer-events-none">
+              {caption}
+            </div>
+          )}
+        </div>
+      )}
+    </>
   )
 }
 
