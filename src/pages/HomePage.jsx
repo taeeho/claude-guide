@@ -35,6 +35,18 @@ const optionalCards = [
     tag: '개발·파워유저용'
   },
   {
+    to: '/tips', num: '/', tone: 'orange',
+    title: 'Code 꿀팁 & 단축키',
+    desc: '슬래시 커맨드, 입력창 단축키, CLI 플래그, MCP 관리까지 한 장에.',
+    tag: '파워유저용'
+  },
+  {
+    to: '/cowork-guide', num: 'W', tone: 'teal',
+    title: 'Cowork 사용 안내',
+    desc: '파일 생성·자동화까지 가능한 데스크톱 전용 모드. 세팅부터 업무 예시까지.',
+    tag: 'COWORK USAGE'
+  },
+  {
     to: '/cowork', num: '!', tone: 'red',
     title: 'COWORK 오류 해결',
     desc: 'Claude Cowork가 실행되지 않을 때 — BIOS 가상화·재설치 가이드.',
@@ -85,7 +97,7 @@ export default function HomePage() {
     <>
       <section className="max-w-[1200px] mx-auto px-5 sm:px-7 pt-10 sm:pt-16 pb-6 sm:pb-8">
         <span className="inline-flex items-center gap-2 text-[12.5px] font-semibold tracking-[.04em] text-accent bg-accentsoft px-3 py-1.5 rounded-full uppercase">
-          AX기획팀 Claude 가이드
+          AX팀 Claude 가이드
         </span>
         <h1 className="text-[36px] sm:text-[48px] lg:text-[56px] leading-[1.04] tracking-[-0.025em] mt-4 mb-4 font-extrabold max-w-[880px]">
           처음 쓰시는 분을 위한<br />

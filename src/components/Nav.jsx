@@ -7,7 +7,9 @@ const links = [
   { to: '/mcp', label: '외부 도구 연결' },
   { to: '/safety', label: '안전 수칙' },
   { to: '/code', label: 'Claude Code', muted: true },
-  { to: '/cowork', label: 'COWORK 오류' },
+  { to: '/tips', label: 'Code 꿀팁', muted: true },
+  { to: '/cowork-guide', label: 'Cowork 사용법' },
+  { to: '/cowork', label: 'Cowork 오류' },
   { to: '/troubleshoot', label: 'FAQ' }
 ]
 
@@ -27,9 +29,9 @@ export default function Nav() {
     <header className="sticky top-0 z-30 border-b border-line nav-blur" style={{ backdropFilter: 'blur(14px)', background: 'rgba(250,249,245,.85)' }}>
       <div className="max-w-[1200px] mx-auto px-5 sm:px-7 py-3.5 flex items-center justify-between gap-6">
         <Link to="/" className="flex items-center gap-2.5 font-bold text-[15px] text-ink no-underline">
-          <span className="w-7 h-7 rounded-[8px] grid place-items-center text-white font-extrabold text-[13px] shadow-sm2" style={{ background: 'linear-gradient(135deg,#C2410C,#EA580C)' }}>C</span>
-          <span>Claude 설치 가이드북</span>
-          <small className="text-inkmuted font-medium ml-1.5 hidden lg:inline">· AX기획팀</small>
+          <img src="/ccfm-logo.png" alt="CCFM 로고" className="w-7 h-7 object-contain" />
+          <span>Claude 가이드북</span>
+          <small className="text-inkmuted font-medium ml-1.5 hidden lg:inline">· AX팀</small>
         </Link>
 
         {/* Desktop nav */}
