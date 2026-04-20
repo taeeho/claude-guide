@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claude 설치 가이드북 — APP & Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAF9F5;
+    --bg-soft: #F2EEE5;
+    --paper: #FFFFFF;
+    --ink: #1F1E1B;
+    --ink-soft: #5C5A52;
+    --ink-muted: #8A877E;
+    --line: #E6E1D6;
+    --line-strong: #D4CDBE;
+    --accent: #C2410C;       /* Anthropic-ish 오렌지/테라코타 */
+    --accent-soft: #FBEADD;
+    --teal: #0F766E;
+    --teal-soft: #E6F2F0;
+    --warn: #B45309;
+    --warn-soft: #FDF3D8;
+    --code-bg: #1B1B19;
+    --code-ink: #F2EFE6;
+    --shadow-sm: 0 1px 2px rgba(31,30,27,.05);
+    --shadow-md: 0 8px 24px -12px rgba(31,30,27,.18);
+    --shadow-lg: 0 24px 48px -20px rgba(31,30,27,.25);
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 18px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Pretendard','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--accent);color:#fff}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    backdrop-filter: blur(14px);
+    background: rgba(250,249,245,.85);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1200px;margin:0 auto;
+    padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--ink)}
+  .brand .logo{
+    width:28px;height:28px;border-radius:8px;
+    background:linear-gradient(135deg,#C2410C,#EA580C);
+    display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;
+    box-shadow: var(--shadow-sm);
+  }
+  .brand small{color:var(--ink-muted);font-weight:500;margin-left:6px}
+  .nav{display:flex;gap:6px;flex-wrap:wrap}
+  .nav a{
+    text-decoration:none;color:var(--ink-soft);
+    font-size:13.5px;font-weight:500;
+    padding:8px 12px;border-radius:8px;
+    transition:.15s ease;
+  }
+  .nav a:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:1200px;margin:0 auto;
+    padding:64px 28px 48px;
+    display:grid;grid-template-columns: 1.2fr 1fr;gap:56px;align-items:center;
+  }
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;font-weight:600;letter-spacing:.04em;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:6px 12px;border-radius:999px;
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:54px;line-height:1.05;letter-spacing:-.025em;
+    margin:18px 0 16px;font-weight:800;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(120deg,#C2410C,#EA580C 60%,#0F766E);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{
+    font-size:17px;color:var(--ink-soft);max-width:540px;margin:0 0 28px;
+  }
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 18px;border-radius:10px;
+    font-size:14px;font-weight:600;text-decoration:none;
+    transition:.15s ease;border:1px solid transparent;cursor:pointer;
+  }
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#000;transform:translateY(-1px);box-shadow:var(--shadow-md)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+  .btn-ghost:hover{background:var(--bg-soft)}
+
+  .hero-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    padding:24px;
+    box-shadow:var(--shadow-md);
+  }
+  .hero-card h3{
+    margin:0 0 14px;font-size:14px;font-weight:600;color:var(--ink-muted);
+    text-transform:uppercase;letter-spacing:.05em;
+  }
+  .quick-list{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+  .quick-list a{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:10px;
+    text-decoration:none;color:var(--ink);
+    background:var(--bg);
+    border:1px solid var(--line);
+    transition:.15s ease;font-weight:500;font-size:14px;
+  }
+  .quick-list a:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateX(2px)}
+  .quick-list .num{
+    width:26px;height:26px;border-radius:7px;
+    display:grid;place-items:center;
+    background:var(--ink);color:#fff;font-size:12px;font-weight:700;
+    flex-shrink:0;
+  }
+  .quick-list .arrow{margin-left:auto;color:var(--ink-muted);font-weight:600}
+
+  /* ---------- Section ---------- */
+  main{max-width:1100px;margin:0 auto;padding:0 28px 80px}
+  .section{
+    margin-top:56px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    overflow:hidden;
+    scroll-margin-top:80px;
+  }
+  .section-head{
+    padding:32px 36px 24px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,var(--bg-soft),transparent);
+  }
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:700;letter-spacing:.06em;
+    color:var(--teal);background:var(--teal-soft);
+    padding:5px 10px;border-radius:6px;text-transform:uppercase;
+  }
+  .section-tag.orange{color:var(--accent);background:var(--accent-soft)}
+  .section h2{
+    font-size:32px;margin:14px 0 8px;
+    letter-spacing:-.02em;font-weight:700;
+  }
+  .section .desc{color:var(--ink-soft);margin:0;max-width:640px;font-size:15.5px}
+
+  .section-body{padding:28px 36px 36px}
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:inline-flex;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:4px;gap:4px;
+    margin-bottom:28px;
+  }
+  .tab{
+    border:0;background:transparent;cursor:pointer;
+    padding:8px 18px;border-radius:7px;
+    font-size:13.5px;font-weight:600;color:var(--ink-soft);
+    font-family:inherit;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:.15s ease;
+  }
+  .tab:hover{color:var(--ink)}
+  .tab.active{background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm)}
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-muted)}
+  .tab.active .dot{background:var(--accent)}
+  .pane{display:none}
+  .pane.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* ---------- Steps ---------- */
+  .steps{display:flex;flex-direction:column;gap:18px;margin-top:8px}
+  .step{
+    display:grid;
+    grid-template-columns: 44px 1fr;
+    gap:18px;
+    padding:20px 22px;
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    background:var(--paper);
+    transition:.15s ease;
+  }
+  .step:hover{border-color:var(--line-strong);box-shadow:var(--shadow-sm)}
+  .step-num{
+    width:36px;height:36px;border-radius:10px;
+    background:var(--ink);color:#fff;
+    display:grid;place-items:center;
+    font-weight:700;font-size:15px;
+    box-shadow:var(--shadow-sm);
+  }
+  .step h4{margin:4px 0 8px;font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .step p{margin:6px 0;color:var(--ink-soft);font-size:14.5px}
+  .step .kbd{
+    display:inline-block;font-family:'JetBrains Mono',monospace;
+    background:var(--bg-soft);border:1px solid var(--line-strong);
+    padding:2px 8px;border-radius:6px;font-size:13px;
+    color:var(--ink);box-shadow:0 1px 0 var(--line-strong);
+  }
+  .step ul{margin:8px 0 0;padding-left:18px;color:var(--ink-soft);font-size:14.5px}
+  .step ul li{margin:4px 0}
+  .step a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft);font-weight:500}
+  .step a:hover{border-bottom-color:var(--accent)}
+
+  /* ---------- Code blocks ---------- */
+  .code{
+    position:relative;
+    background:var(--code-bg);
+    color:var(--code-ink);
+    font-family:'JetBrains Mono','Fira Code',Menlo,Consolas,monospace;
+    font-size:13.5px;line-height:1.6;
+    border-radius:10px;
+    padding:14px 16px;
+    margin:12px 0 4px;
+    overflow-x:auto;
+    border:1px solid #2a2a26;
+  }
+  .code .prompt{color:#7BC596;user-select:none;margin-right:8px}
+  .code .copy{
+    position:absolute;top:8px;right:8px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    color:#E6E1D6;
+    padding:4px 10px;font-size:11.5px;font-weight:600;
+    border-radius:6px;cursor:pointer;
+    font-family:inherit;letter-spacing:.02em;
+    transition:.15s ease;
+  }
+  .code .copy:hover{background:rgba(255,255,255,.12)}
+  .code .copy.ok{background:#0F766E;border-color:#0F766E;color:#fff}
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    display:flex;gap:14px;
+    padding:14px 16px;
+    border-radius:10px;
+    margin:14px 0 4px;
+    font-size:14px;
+    border:1px solid transparent;
+  }
+  .callout.warn{background:var(--warn-soft);border-color:#F2D78A;color:#7C4A00}
+  .callout.info{background:var(--teal-soft);border-color:#B7DDD5;color:#0E5C56}
+  .callout .ico{font-weight:700;font-size:16px;flex-shrink:0;line-height:1.4}
+
+  /* ---------- Image figure ---------- */
+  figure.shot{
+    margin:14px 0 4px;
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    background:#0E0E0C;
+    padding:14px;
+    overflow:hidden;
+  }
+  figure.shot img{
+    display:block;width:100%;height:auto;
+    border-radius:8px;
+    box-shadow:var(--shadow-md);
+  }
+  figure.shot figcaption{
+    margin-top:10px;font-size:12.5px;color:#A8A39A;
+    text-align:center;letter-spacing:.02em;
+  }
+
+  /* ---------- Divider between Mac/Win ---------- */
+  .os-banner{
+    display:flex;align-items:center;gap:10px;
+    margin:0 0 4px;font-size:13px;font-weight:600;
+    color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;
+  }
+  .os-banner::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* ---------- MCP Cards ---------- */
+  .mcp-intro{
+    display:grid;grid-template-columns: 1fr 1fr;gap:24px;
+    align-items:start;margin-bottom:24px;
+  }
+  .mcp-intro .code{margin-top:0}
+  .mcp-intro .note{
+    font-size:14px;color:var(--ink-soft);
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    padding:16px 18px;line-height:1.6;
+  }
+  .mcp-intro .note b{color:var(--ink)}
+
+  .mcp-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:18px;
+  }
+  .mcp-card{
+    display:flex;flex-direction:column;gap:10px;
+    padding:20px 20px 18px;
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    background:var(--paper);
+    transition:.15s ease;
+    position:relative;
+  }
+  .mcp-card:hover{
+    border-color:var(--line-strong);
+    box-shadow:var(--shadow-md);
+    transform:translateY(-2px);
+  }
+  .mcp-card .mcp-head{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+  }
+  .mcp-icon{
+    width:40px;height:40px;
+    border-radius:10px;
+    display:grid;place-items:center;
+    font-size:20px;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+  }
+  .mcp-icon.orange{background:var(--accent-soft);border-color:#F3CBA9}
+  .mcp-icon.teal{background:var(--teal-soft);border-color:#B7DDD5}
+  .mcp-icon.purple{background:#F1EBFB;border-color:#DDD0F1}
+  .mcp-icon.blue{background:#E6EEFB;border-color:#C2D3F0}
+  .mcp-icon.rose{background:#FBE7EE;border-color:#F0C2D1}
+  .mcp-icon.green{background:#E5F3E6;border-color:#BEDFC0}
+  .mcp-icon.yellow{background:#FAF2CF;border-color:#EDDD8E}
+  .mcp-icon.gray{background:#EEECE5;border-color:#D6D2C5}
+  .mcp-icon.slate{background:#E7EAEE;border-color:#C4CBD4}
+
+  .mcp-pill{
+    font-size:11px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;border-radius:6px;
+    background:var(--accent-soft);color:var(--accent);
+  }
+  .mcp-pill.teal{background:var(--teal-soft);color:var(--teal)}
+  .mcp-pill.gray{background:var(--bg-soft);color:var(--ink-muted)}
+
+  .mcp-card h4{
+    margin:2px 0 0;font-size:17px;font-weight:700;letter-spacing:-.01em;
+  }
+  .mcp-card .tagline{
+    margin:0;font-size:13.5px;color:var(--ink-soft);min-height:2.6em;
+  }
+  .mcp-card .why{
+    margin:4px 0 6px;padding-left:16px;
+    font-size:13px;color:var(--ink-soft);
+  }
+  .mcp-card .why li{margin:3px 0}
+  .mcp-card .code{
+    font-size:12px;padding:10px 12px;margin:4px 0 0;
+  }
+  .mcp-card .mcp-foot{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    margin-top:auto;padding-top:6px;
+    font-size:12.5px;
+  }
+  .mcp-card .mcp-foot a{
+    color:var(--accent);text-decoration:none;font-weight:600;
+    border-bottom:1px solid transparent;
+  }
+  .mcp-card .mcp-foot a:hover{border-bottom-color:var(--accent)}
+  .mcp-card .mcp-foot .need{color:var(--ink-muted)}
+
+  @media (max-width: 1000px){
+    .mcp-grid{grid-template-columns: repeat(2, 1fr)}
+    .mcp-intro{grid-template-columns:1fr}
+  }
+  @media (max-width: 640px){
+    .mcp-grid{grid-template-columns: 1fr}
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    max-width:1200px;margin:0 auto;
+    padding:32px 28px 56px;
+    color:var(--ink-muted);font-size:13px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    border-top:1px solid var(--line);
+    margin-top:48px;
+  }
+  footer a{color:var(--ink-soft);text-decoration:none;border-bottom:1px dashed var(--line-strong)}
+  footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 880px){
+    .hero{grid-template-columns:1fr;padding:40px 22px 24px;gap:32px}
+    .hero h1{font-size:38px}
+    main{padding:0 18px 64px}
+    .section-head{padding:24px 22px 18px}
+    .section-body{padding:22px 22px 28px}
+    .topbar-inner{padding:12px 18px}
+    .nav{display:none}
+    .step{grid-template-columns:36px 1fr;padding:16px}
+    .step-num{width:32px;height:32px;font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== TOP BAR ====== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="logo">C</span>
+      Claude 설치 가이드북 <small>· AX기획팀</small>
+    </div>
+    <nav class="nav">
+      <a href="#start">시작하기</a>
+      <a href="#app">Claude APP</a>
+      <a href="#code">Claude Code</a>
+      <a href="#mcp">MCP 추천</a>
+      <a href="#troubleshoot">자주 묻는 문제</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ====== HERO ====== -->
+<section class="hero" id="start">
+  <div>
+    <span class="hero-eyebrow">처음 설치하시는 분을 위한 가이드</span>
+    <h1>10분이면 끝나는<br/><em>Claude 설치 한 번에 끝내기</em></h1>
+    <p class="lead">
+      Claude를 처음 깔아보는 분들을 위한 한 페이지짜리 가이드입니다.
+      데스크톱 앱(<b>Claude APP</b>)과 터미널 도구(<b>Claude Code</b>)
+      두 가지를 Mac과 Windows 환경별로 순서대로 안내해드려요.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#app">Claude APP 부터 설치 →</a>
+      <a class="btn btn-ghost" href="#code">개발자 도구만 보기</a>
+    </div>
+  </div>
+
+  <aside class="hero-card">
+    <h3>한눈에 보는 순서</h3>
+    <ul class="quick-list">
+      <li><a href="#app">
+        <span class="num">1</span> Claude 데스크톱 앱 설치
+        <span class="arrow">→</span>
+      </a></li>
+      <li><a href="#code">
+        <span class="num">2</span> Claude Code (터미널) 설치
+        <span class="arrow">→</span>
+      </a></li>
+      <li><a href="#mcp">
+        <span class="num">3</span> MCP 서버 추천 9선
+        <span class="arrow">→</span>
+      </a></li>
+      <li><a href="#troubleshoot">
+        <span class="num">4</span> 안 될 때 체크리스트
+        <span class="arrow">→</span>
+      </a></li>
+    </ul>
+  </aside>
+</section>
+
+<main>
+
+  <!-- ====== SECTION 1: CLAUDE APP ====== -->
+  <section class="section" id="app">
+    <div class="section-head">
+      <span class="section-tag orange">PART 1 · DESKTOP</span>
+      <h2>Claude APP 설치</h2>
+      <p class="desc">
+        브라우저 없이 데스크톱에서 바로 Claude와 대화할 수 있는 공식 앱입니다.
+        <a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a> 에서 받습니다.
+      </p>
+    </div>
+
+    <div class="section-body">
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist" data-group="app">
+        <button class="tab active" data-target="app-win"><span class="dot"></span>Windows</button>
+        <button class="tab" data-target="app-mac"><span class="dot"></span>macOS</button>
+      </div>
+
+      <!-- Common screenshot -->
+      <figure class="shot">
+        <img src="images/claude-download.png" alt="Claude Download 페이지 - Windows / macOS 다운로드 버튼" />
+        <figcaption>claude.com/download — 본인 OS에 맞는 버튼을 누릅니다.</figcaption>
+      </figure>
+
+      <!-- Windows pane -->
+      <div class="pane active" id="app-win">
+        <div class="os-banner">Windows 설치 순서</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h4>다운로드 페이지 열기</h4>
+              <p><a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a> 접속 → 상단의 <b>“Download for Windows”</b> 버튼 클릭.</p>
+              <p style="font-size:13px;color:var(--ink-muted)">※ ARM 노트북(Surface 등) 사용자는 옆의 <b>Windows (arm64)</b> 버튼을 누르세요.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h4><code>.exe</code> 설치 파일 실행</h4>
+              <p>다운로드 폴더에서 받은 파일을 더블클릭합니다.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h4>설치 마법사 진행</h4>
+              <p><b>Next → Install → Finish</b> 순서로 기본값 그대로 진행하면 됩니다.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h4>실행 후 로그인</h4>
+              <p>설치가 끝나면 자동으로 Claude가 실행됩니다. Anthropic 계정(또는 Google)으로 로그인하면 끝.</p>
+              <div class="callout info">
+                <span class="ico">i</span>
+                <span>회사 계정으로 사용하시는 분은 <b>ai@ccfm.co.kr</b> 도메인 계정으로 로그인해주세요.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mac pane -->
+      <div class="pane" id="app-mac">
+        <div class="os-banner">macOS 설치 순서</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h4>다운로드 페이지에서 macOS 선택</h4>
+              <p><a href="https://claude.com/download" target="_blank" rel="noopener">claude.com/download</a> 의 <b>Get started → Desktop → macOS</b> 의 <b>Download</b> 버튼을 누릅니다.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h4><code>.dmg</code> 파일 다운로드</h4>
+              <p>받은 디스크 이미지를 더블클릭해서 엽니다.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h4>Applications 폴더로 드래그</h4>
+              <p>Claude 아이콘을 옆의 <b>Applications</b> 폴더로 끌어다 놓으면 설치가 끝납니다.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h4>실행 → 보안 경고 시 “열기” 클릭</h4>
+              <p>처음 실행할 땐 macOS 보안 경고가 한 번 뜹니다. <b>“열기”</b>를 누르고 Anthropic 계정으로 로그인.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ====== SECTION 2: CLAUDE CODE ====== -->
+  <section class="section" id="code">
+    <div class="section-head">
+      <span class="section-tag">PART 2 · CLI</span>
+      <h2>Claude Code 설치</h2>
+      <p class="desc">
+        터미널에서 Claude를 코딩 파트너로 부리는 CLI 도구입니다.
+        설치 후엔 폴더로 들어가 <code>claude</code> 한 줄이면 바로 시작돼요.
+        <b>Pro / Max / Team / Enterprise 요금제 계정</b>이 필요합니다.
+      </p>
+    </div>
+
+    <div class="section-body">
+
+      <div class="tabs" role="tablist" data-group="code">
+        <button class="tab active" data-target="code-win"><span class="dot"></span>Windows</button>
+        <button class="tab" data-target="code-mac"><span class="dot"></span>macOS</button>
+      </div>
+
+      <!-- Windows pane -->
+      <div class="pane active" id="code-win">
+        <div class="os-banner">Windows · PowerShell 기준</div>
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h4>PowerShell 열기</h4>
+              <p><span class="kbd">시작</span> 키 → <b>“PowerShell”</b> 입력 후 엔터.</p>
+              <div class="callout warn">
+                <span class="ico">!</span>
+                <span><b>PowerShell</b> 이어야 합니다. CMD(명령 프롬프트) 아닙니다.</span>
+              </div>
+              <p>먼저 Git이 깔려있는지 확인합니다:</p>
+              <div class="code">
+                <button class="copy" data-copy="git -v">복사</button>
+                <span class="prompt">PS&gt;</span>git -v
+              </div>
+              <p style="font-size:13px;color:var(--ink-muted)">버전이 출력되면 <b>3단계로 건너뛰기</b>, 안 나오면 2단계부터 진행하세요.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h4>Git 설치 (필요한 경우만)</h4>
+              <p><a href="https://git-scm.com/install/windows" target="_blank" rel="noopener">git-scm.com/install/windows</a> 에서 <b>“Click here to download”</b>를 누르고 받은 설치파일을 실행합니다.</p>
+              <figure class="shot">
+                <img src="images/git-download.png" alt="Git for Windows 다운로드 페이지" />
+                <figcaption>Git for Windows — 빨간 박스 영역의 다운로드 링크 클릭</figcaption>
+              </figure>
+              <p>설치 마법사의 모든 옵션은 <b>전부 Default</b> 그대로 두고 <b>Next → Finish</b> 까지 진행하면 됩니다.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h4>Claude Code 설치 명령어 실행</h4>
+              <p>PowerShell에 아래 한 줄을 붙여넣고 엔터:</p>
+              <div class="code">
+                <button class="copy" data-copy="irm https://claude.ai/install.ps1 | iex">복사</button>
+                <span class="prompt">PS&gt;</span>irm https://claude.ai/install.ps1 | iex
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h4>새 PowerShell 창 열기</h4>
+              <p>기존 창을 닫고 새 PowerShell을 다시 엽니다. <b>PATH 환경변수가 새 창부터 적용</b>되기 때문에 이 단계를 거르면 다음 명령이 인식되지 않아요.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">5</div>
+            <div>
+              <h4>설치 확인 & 실행</h4>
+              <div class="code">
+                <button class="copy" data-copy="claude -v">복사</button>
+                <span class="prompt">PS&gt;</span>claude -v
+              </div>
+              <p>버전이 뜨면 성공. 작업할 폴더로 이동해서 실행합니다:</p>
+              <div class="code">
+                <button class="copy" data-copy="cd C:\작업할폴더경로
+claude">복사</button>
+                <span class="prompt">PS&gt;</span>cd C:\작업할폴더경로<br/>
+                <span class="prompt">PS&gt;</span>claude
+              </div>
+              <ul>
+                <li>첫 실행 시 <b>브라우저가 자동으로 열려</b> Anthropic 로그인 화면이 나옵니다.</li>
+                <li>로그인이 끝나면 PowerShell로 돌아와서 바로 사용 가능.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Mac pane -->
+      <div class="pane" id="code-mac">
+        <div class="os-banner">macOS · Terminal 기준</div>
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h4>터미널 열기</h4>
+              <p><span class="kbd">⌘ + Space</span> → <b>"terminal"</b> 입력 → 엔터.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h4>설치 명령어 실행</h4>
+              <p>터미널에 아래 한 줄을 붙여넣고 엔터:</p>
+              <div class="code">
+                <button class="copy" data-copy="curl -fsSL https://claude.ai/install.sh | bash">복사</button>
+                <span class="prompt">$</span>curl -fsSL https://claude.ai/install.sh | bash
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h4>새 터미널 창 열기</h4>
+              <p>설치 후엔 <b>반드시 새 창</b>을 열어야 <code>claude</code> 명령이 인식됩니다 (PATH 반영).</p>
+              <ul>
+                <li><span class="kbd">⌘ + N</span> 또는 터미널 재시작</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h4>설치 확인</h4>
+              <div class="code">
+                <button class="copy" data-copy="claude -v">복사</button>
+                <span class="prompt">$</span>claude -v
+              </div>
+              <p>버전이 뜨면 성공.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">5</div>
+            <div>
+              <h4>실행</h4>
+              <div class="code">
+                <button class="copy" data-copy="cd ~/작업할폴더경로
+claude">복사</button>
+                <span class="prompt">$</span>cd ~/작업할폴더경로<br/>
+                <span class="prompt">$</span>claude
+              </div>
+              <ul>
+                <li>첫 실행 시 브라우저가 자동으로 열립니다.</li>
+                <li>Anthropic 계정으로 로그인 (Pro / Max / Team / Enterprise 필수).</li>
+                <li>로그인이 끝나면 터미널로 돌아와서 바로 사용 가능.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ====== SECTION 3: MCP RECOMMENDATIONS ====== -->
+  <section class="section" id="mcp">
+    <div class="section-head">
+      <span class="section-tag orange">PART 3 · EXTENSIONS</span>
+      <h2>MCP 서버 추천 9선</h2>
+      <p class="desc">
+        MCP(Model Context Protocol)는 Claude가 외부 도구·데이터와 연결되는 통로예요.
+        설치해두면 Claude가 브라우저를 켜고, 노션을 읽고, 최신 문서를 찾아올 수 있어요.
+        AX기획팀 업무 흐름에 특히 궁합이 좋은 9개를 골라봤어요.
+      </p>
+    </div>
+
+    <div class="section-body">
+
+      <div class="mcp-intro">
+        <div class="note">
+          <b>설치 방법 (Claude Code 기준)</b> — 아래 각 카드의 명령을 터미널에 그대로 붙여넣으면 됩니다.<br/>
+          등록 후에는 <code>claude mcp list</code> 로 연결 상태를 확인할 수 있어요.<br/>
+          <span style="color:var(--ink-muted);font-size:13px">데스크톱 앱에서 쓰려면 <code>Settings → Connectors → MCP Servers</code> 에서 동일한 커맨드를 JSON으로 등록.</span>
+        </div>
+        <div class="code">
+          <button class="copy" data-copy="claude mcp list">복사</button>
+          <span class="prompt">$</span>claude mcp list
+          <br/>
+          <span class="prompt">$</span>claude mcp add &lt;name&gt; -- &lt;command&gt; &lt;args...&gt;
+        </div>
+      </div>
+
+      <div class="mcp-grid">
+
+        <!-- 1. Playwright -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon green">PW</div>
+            <span class="mcp-pill">필수</span>
+          </div>
+          <h4>Playwright</h4>
+          <p class="tagline">실제 브라우저를 열어 웹 동작·E2E 시나리오를 검증.</p>
+          <ul class="why">
+            <li>내가 만든 MVP 화면이 실제로 동작하는지 확인</li>
+            <li>로그인·폼·스크린샷 자동화</li>
+            <li>바이브코딩 결과물 회귀 테스트</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add playwright -- npx -y @playwright/mcp@latest">복사</button>
+            <span class="prompt">$</span>claude mcp add playwright -- npx -y @playwright/mcp@latest
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/microsoft/playwright-mcp" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">Node.js 필요</span>
+          </div>
+        </div>
+
+        <!-- 2. Context7 -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon blue">C7</div>
+            <span class="mcp-pill">필수</span>
+          </div>
+          <h4>Context7</h4>
+          <p class="tagline">라이브러리·프레임워크 최신 공식 문서를 실시간으로 주입.</p>
+          <ul class="why">
+            <li>React / FastAPI / Supabase SDK 버전 따라가기</li>
+            <li>학습 데이터보다 최신인 API 반영</li>
+            <li>“이 버전엔 이 메서드 없어요” 방지</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add context7 -- npx -y @upstash/context7-mcp">복사</button>
+            <span class="prompt">$</span>claude mcp add context7 -- npx -y @upstash/context7-mcp
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/upstash/context7" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">API key 선택</span>
+          </div>
+        </div>
+
+        <!-- 3. Sequential Thinking -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon purple">ST</div>
+            <span class="mcp-pill">필수</span>
+          </div>
+          <h4>Sequential Thinking</h4>
+          <p class="tagline">복잡한 문제를 단계별로 쪼개서 깊게 사고하게 만드는 추론 도구.</p>
+          <ul class="why">
+            <li>아키텍처 / 트레이드오프 판단</li>
+            <li>N8N vs 코드 구현 같은 선택지 비교</li>
+            <li>디버깅 가설 트리 탐색</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking">복사</button>
+            <span class="prompt">$</span>claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">키 불필요</span>
+          </div>
+        </div>
+
+        <!-- 4. Notion -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon gray">No</div>
+            <span class="mcp-pill">필수</span>
+          </div>
+          <h4>Notion</h4>
+          <p class="tagline">Notion 페이지·DB를 직접 읽고 쓰며 문서화 자동화.</p>
+          <ul class="why">
+            <li>회의록·가이드·요구사항 페이지 자동 생성</li>
+            <li>팀 위키 검색·요약</li>
+            <li>업무 티켓 DB CRUD</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy='claude mcp add notion --env NOTION_TOKEN=secret_xxx -- npx -y @notionhq/notion-mcp-server'>복사</button>
+            <span class="prompt">$</span>claude mcp add notion \<br/>
+            &nbsp;&nbsp;--env NOTION_TOKEN=secret_xxx -- \<br/>
+            &nbsp;&nbsp;npx -y @notionhq/notion-mcp-server
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/makenotion/notion-mcp-server" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">Internal Integration 토큰 필요</span>
+          </div>
+        </div>
+
+        <!-- 5. Google Drive -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon yellow">GD</div>
+            <span class="mcp-pill">필수</span>
+          </div>
+          <h4>Google Drive</h4>
+          <p class="tagline">드라이브 파일 검색·읽기·Google Sheets 내용 접근.</p>
+          <ul class="why">
+            <li>팀 드라이브의 자료 검색·요약</li>
+            <li>Sheets 데이터 불러와 분석·리포트 생성</li>
+            <li>첨부 PDF·문서 맥락으로 사용</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add gdrive -- npx -y @modelcontextprotocol/server-gdrive">복사</button>
+            <span class="prompt">$</span>claude mcp add gdrive -- npx -y @modelcontextprotocol/server-gdrive
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">OAuth 인증 필요</span>
+          </div>
+        </div>
+
+        <!-- 6. Google Calendar -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon rose">GC</div>
+            <span class="mcp-pill teal">업무</span>
+          </div>
+          <h4>Google Calendar</h4>
+          <p class="tagline">일정 조회·생성·리마인더 자동화.</p>
+          <ul class="why">
+            <li>"다음주 회의 잡아줘" 처럼 자연어로 일정 등록</li>
+            <li>회의 전 브리핑 노트 자동 생성</li>
+            <li>빈 시간 탐색 후 일정 제안</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add gcal -- npx -y @cocal/google-calendar-mcp">복사</button>
+            <span class="prompt">$</span>claude mcp add gcal -- npx -y @cocal/google-calendar-mcp
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/nspady/google-calendar-mcp" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">OAuth 인증 필요</span>
+          </div>
+        </div>
+
+        <!-- 7. Supabase -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon green">Sb</div>
+            <span class="mcp-pill teal">업무</span>
+          </div>
+          <h4>Supabase</h4>
+          <p class="tagline">PostgreSQL 쿼리·스키마 관리·스토리지를 Claude가 직접.</p>
+          <ul class="why">
+            <li>AX팀 기본 DB 스택과 궁합 최상</li>
+            <li>테이블 설계·마이그레이션 초안</li>
+            <li>데이터 추출·리포트 쿼리 자동화</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add supabase --env SUPABASE_ACCESS_TOKEN=sbp_xxx -- npx -y @supabase/mcp-server-supabase@latest">복사</button>
+            <span class="prompt">$</span>claude mcp add supabase \<br/>
+            &nbsp;&nbsp;--env SUPABASE_ACCESS_TOKEN=sbp_xxx -- \<br/>
+            &nbsp;&nbsp;npx -y @supabase/mcp-server-supabase@latest
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/supabase-community/supabase-mcp" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">Access Token 필요</span>
+          </div>
+        </div>
+
+        <!-- 8. Filesystem -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon slate">Fs</div>
+            <span class="mcp-pill teal">업무</span>
+          </div>
+          <h4>Filesystem</h4>
+          <p class="tagline">허용한 폴더만 안전하게 읽기/쓰기 — 데스크톱 앱에서 특히 유용.</p>
+          <ul class="why">
+            <li>Claude 앱이 로컬 파일을 직접 다룰 수 있게</li>
+            <li>여러 프로젝트 폴더 넘나들기</li>
+            <li>권한 범위 명시적 제한(보안↑)</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy='claude mcp add fs -- npx -y @modelcontextprotocol/server-filesystem "C:\Users\MKM10011\Desktop"'>복사</button>
+            <span class="prompt">$</span>claude mcp add fs -- \<br/>
+            &nbsp;&nbsp;npx -y @modelcontextprotocol/server-filesystem \<br/>
+            &nbsp;&nbsp;"C:\Users\MKM10011\Desktop"
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">허용 경로 지정</span>
+          </div>
+        </div>
+
+        <!-- 9. GitHub -->
+        <div class="mcp-card">
+          <div class="mcp-head">
+            <div class="mcp-icon gray">Gh</div>
+            <span class="mcp-pill teal">업무</span>
+          </div>
+          <h4>GitHub</h4>
+          <p class="tagline">저장소·이슈·PR·코드 검색을 Claude가 직접 다루기.</p>
+          <ul class="why">
+            <li>PR 리뷰·요약·코멘트</li>
+            <li>이슈 티켓 자동 생성</li>
+            <li>레포 코드 검색 후 수정 제안</li>
+          </ul>
+          <div class="code">
+            <button class="copy" data-copy="claude mcp add --transport http github https://api.githubcopilot.com/mcp/">복사</button>
+            <span class="prompt">$</span>claude mcp add --transport http \<br/>
+            &nbsp;&nbsp;github https://api.githubcopilot.com/mcp/
+          </div>
+          <div class="mcp-foot">
+            <a href="https://github.com/github/github-mcp-server" target="_blank" rel="noopener">공식 문서 →</a>
+            <span class="need">GitHub OAuth 필요</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="callout info" style="margin-top:24px">
+        <span class="ico">i</span>
+        <span>
+          커맨드가 잘 안 먹히면 <code>claude mcp remove &lt;name&gt;</code> 로 지우고 다시 등록하세요.
+          Node.js 기반 MCP는 최초 실행 시 <code>npx</code>가 패키지를 받느라 몇 초~수십 초 걸릴 수 있어요.
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ====== SECTION 4: TROUBLESHOOT ====== -->
+  <section class="section" id="troubleshoot">
+    <div class="section-head">
+      <span class="section-tag">PART 4 · CHECKLIST</span>
+      <h2>안 될 때 확인할 것</h2>
+      <p class="desc">설치 중 가장 자주 막히는 지점을 모았어요. 위에서 아래로 한 번씩 점검해보세요.</p>
+    </div>
+    <div class="section-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">!</div>
+          <div>
+            <h4><code>claude</code> 명령어가 인식되지 않아요</h4>
+            <p>거의 100% <b>새 터미널 창을 안 열어서</b> 생기는 문제입니다. 기존 창을 완전히 닫고 새 PowerShell / Terminal을 열어 다시 시도하세요.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">!</div>
+          <div>
+            <h4>Windows에서 <code>git</code>이 안 잡혀요</h4>
+            <p>Git 설치 후에도 같은 PowerShell 창에서는 인식되지 않습니다. <b>새 창</b>을 열고 <code>git -v</code> 를 다시 확인하세요.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">!</div>
+          <div>
+            <h4>로그인 후에도 “요금제 필요” 메시지가 떠요</h4>
+            <p>Claude Code는 무료 계정으로는 사용할 수 없습니다. <b>Pro / Max / Team / Enterprise</b> 요금제 계정인지 확인해주세요.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">!</div>
+          <div>
+            <h4>macOS에서 “확인되지 않은 개발자” 경고</h4>
+            <p>처음 한 번만 나옵니다. <b>시스템 설정 → 개인정보 보호 및 보안</b>에서 “그래도 열기”를 누르거나, 처음 실행 시 보안창의 <b>“열기”</b> 버튼을 클릭하세요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>© AX기획팀 · Claude 설치 가이드북</div>
+  <div>
+    문의: <a href="mailto:hth@ccfm.co.kr">hth@ccfm.co.kr</a>
+    &nbsp;·&nbsp;
+    <a href="https://claude.com/download" target="_blank" rel="noopener">공식 다운로드</a>
+  </div>
+</footer>
+
+<script>
+  // Tabs
+  document.querySelectorAll('.tabs').forEach(group => {
+    const tabs = group.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.dataset.target;
+        const section = group.closest('.section-body');
+        section.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        section.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        section.querySelector('#' + targetId).classList.add('active');
+      });
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.code .copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        const orig = btn.textContent;
+        btn.textContent = '복사됨 ✓';
+        btn.classList.add('ok');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.remove('ok');
+        }, 1400);
+      } catch (e) {
+        btn.textContent = '복사 실패';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
